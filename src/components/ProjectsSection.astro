@@ -1,0 +1,81 @@
+---
+// src/components/ProjectsSection.astro
+import { getCollection } from 'astro:content';
+import Card from './Card.astro';
+
+const entries = await getCollection('projects');
+---
+<section class="projects container" id="projects">
+  <p class="section-label">projects</p>
+  {entries.length > 0 ? (
+    <div class="grid">
+      {entries.map((entry) => (
+        <Card
+          tag="Project"
+          title={entry.data.title}
+          description={entry.data.description}
+          tags={entry.data.tags}
+          link={entry.data.github}
+        />
+      ))}
+    </div>
+  ) : (
+    <div class="empty">
+      <p class="prompt"><span class="chevron">❯</span> more coming soon<span class="cursor"></span></p>
+      <p>Personal projects are in progress — check back soon or follow along on <a href="https://github.com/Chimdi-Ag" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+    </div>
+  )}
+</section>
+
+<style>
+  .projects {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-sm);
+  }
+
+  .empty {
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: center;
+  }
+
+  .prompt {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--color-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .chevron { color: var(--color-green); }
+
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--color-mauve);
+    animation: blink 1.2s step-end infinite;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 0.8; }
+    50%       { opacity: 0; }
+  }
+
+  p { font-size: 14px; color: var(--color-muted); }
+
+  a { color: var(--color-mauve); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>

@@ -1,0 +1,34 @@
+---
+// src/components/WorkSection.astro
+import { getCollection } from 'astro:content';
+import Card from './Card.astro';
+
+const entries = await getCollection('work');
+entries.sort((a, b) => (b.data.featured ? 1 : 0) - (a.data.featured ? 1 : 0));
+---
+<section class="work container" id="work">
+  <p class="section-label">work</p>
+  <div class="grid">
+    {entries.map((entry) => (
+      <Card
+        tag="Professional"
+        title={entry.data.title}
+        subtitle={`${entry.data.role} · ${entry.data.period}`}
+        description={entry.data.description}
+        tags={entry.data.tags}
+      />
+    ))}
+  </div>
+</section>
+
+<style>
+  .work {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-sm);
+  }
+</style>
