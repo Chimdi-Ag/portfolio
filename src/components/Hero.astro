@@ -1,0 +1,108 @@
+---
+// src/components/Hero.astro
+const pills = [
+  { label: 'Ruby on Rails', color: 'mauve' },
+  { label: 'GraphQL',       color: 'teal' },
+  { label: 'PostgreSQL',    color: 'blue' },
+  { label: 'Docker',        color: 'peach' },
+  { label: 'REST APIs',     color: 'green' },
+  { label: 'Background Jobs', color: 'flamingo' },
+];
+---
+<section class="hero container" id="hero">
+  <p class="prompt" aria-hidden="true">
+    <span class="chevron">❯</span>
+    <span class="cmd">whoami</span>
+    <span class="cursor"></span>
+  </p>
+
+  <h1>
+    Chimdindu<br />
+    <span class="accent">Chukwuka</span>
+  </h1>
+
+  <p class="role">Backend Engineer · <span>Ruby on Rails</span> · GraphQL · APIs</p>
+
+  <div class="pills" role="list" aria-label="Tech stack">
+    {pills.map(({ label, color }) => (
+      <span class={`pill pill--${color}`} role="listitem">{label}</span>
+    ))}
+  </div>
+
+  <div class="cta-row">
+    <a href="#work" class="btn-primary">View My Work</a>
+    <a href="https://github.com/Chimdi-Ag" target="_blank" rel="noopener noreferrer" class="btn-ghost">GitHub</a>
+    <a href="https://www.linkedin.com/in/chimdindu-chukwuka/" target="_blank" rel="noopener noreferrer" class="btn-ghost">LinkedIn</a>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: var(--space-xl) var(--space-md) var(--space-lg);
+  }
+
+  .prompt {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+  .chevron { color: var(--color-green); }
+  .cmd     { color: var(--color-teal); }
+
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    background: var(--color-mauve);
+    animation: blink 1.2s step-end infinite;
+    vertical-align: middle;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 0.8; }
+    50%       { opacity: 0; }
+  }
+
+  h1 {
+    font-size: clamp(48px, 7vw, 84px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    color: #ffffff;
+    margin-bottom: 12px;
+  }
+
+  .accent {
+    background: linear-gradient(135deg, var(--color-mauve) 0%, var(--color-blue) 50%, var(--color-teal) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px rgba(198, 160, 246, 0.3));
+  }
+
+  .role {
+    font-size: 16px;
+    color: var(--color-muted);
+    margin-bottom: var(--space-md);
+    font-family: var(--font-mono);
+    letter-spacing: 0.5px;
+  }
+  .role span { color: var(--color-flamingo); }
+
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+</style>

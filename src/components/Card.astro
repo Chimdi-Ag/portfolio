@@ -1,0 +1,113 @@
+---
+// src/components/Card.astro
+interface Props {
+  tag?: string;
+  title: string;
+  subtitle?: string;
+  description?: string;
+  tags?: string[];
+  link?: string;
+  linkLabel?: string;
+}
+
+const { tag, title, subtitle, description, tags = [], link, linkLabel = '↗' } = Astro.props;
+
+const tagColors = ['mauve', 'teal', 'blue', 'peach', 'green', 'flamingo'];
+---
+<div class="card">
+  {tag && <p class="card-tag">{tag}</p>}
+  <h3>{title}</h3>
+  {subtitle && <p class="subtitle">{subtitle}</p>}
+  {description && <p class="description">{description}</p>}
+  {tags.length > 0 && (
+    <div class="tags">
+      {tags.map((t, i) => (
+        <span class={`pill pill--${tagColors[i % tagColors.length]}`}>{t}</span>
+      ))}
+    </div>
+  )}
+  {link && (
+    <a href={link} target="_blank" rel="noopener noreferrer" class="card-link" aria-label={`View ${title}`}>
+      {linkLabel}
+    </a>
+  )}
+</div>
+
+<style>
+  .card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    position: relative;
+    overflow: hidden;
+    transition: border-color var(--transition), transform var(--transition);
+    cursor: default;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(198, 160, 246, 0.04) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  .card:hover {
+    border-color: rgba(198, 160, 246, 0.25);
+    transform: translateY(-2px);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--color-mauve);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: var(--space-xs);
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-muted);
+    margin-bottom: var(--space-xs);
+  }
+
+  .description {
+    font-size: 14px;
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin-bottom: var(--space-sm);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .card-link {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    color: var(--color-muted);
+    font-size: 18px;
+    text-decoration: none;
+    transition: all var(--transition);
+    cursor: pointer;
+  }
+  .card:hover .card-link {
+    color: var(--color-mauve);
+    transform: translate(2px, -2px);
+  }
+</style>

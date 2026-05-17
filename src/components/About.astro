@@ -1,0 +1,39 @@
+---
+// src/components/About.astro
+---
+<section class="about container" id="about">
+  <p class="section-label">about</p>
+  <div class="content">
+    <p>
+      I'm a backend engineer who builds the systems that power what users never see —
+      clean APIs, reliable data pipelines, and business logic that scales. I work
+      primarily with Ruby on Rails and GraphQL, currently shipping production features
+      at AgrigateOne where I design and maintain a monolith API serving agricultural
+      logistics across shipments, finance, and yield tracking.
+    </p>
+    <p>
+      I care about writing code that's easy to understand and hard to break.
+    </p>
+  </div>
+</section>
+
+<style>
+  .about {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .content {
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  p {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--color-text);
+  }
+
+  p + p { color: var(--color-muted); }
+</style>
