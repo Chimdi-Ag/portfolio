@@ -1,0 +1,48 @@
+/* src/styles/theme.css */
+/* ─────────────────────────────────────────────
+   THEME — edit this file to repaint the whole site
+   ───────────────────────────────────────────── */
+
+:root {
+  /* ── Backgrounds ── */
+  --color-bg:       #000000;
+  --color-surface:  #0d0d0d;
+  --color-border:   rgba(198, 160, 246, 0.12);
+
+  /* ── Catppuccin Macchiato accents ── */
+  --color-mauve:    #c6a0f6;
+  --color-teal:     #8bd5ca;
+  --color-blue:     #8aadf4;
+  --color-flamingo: #f0c6c6;
+  --color-peach:    #f5a97f;
+  --color-green:    #a6da95;
+  --color-red:      #ed8796;
+
+  /* ── Text ── */
+  --color-text:     #cad3f5;
+  --color-muted:    #6e738d;
+  --color-crust:    #181926;
+
+  /* ── Glow (ambient blobs) ── */
+  --glow-primary:   rgba(198, 160, 246, 0.07);
+  --glow-secondary: rgba(139, 213, 202, 0.05);
+
+  /* ── Typography ── */
+  --font-display:   'Space Grotesk', sans-serif;
+  --font-mono:      'JetBrains Mono', monospace;
+
+  /* ── Spacing scale ── */
+  --space-xs:  8px;
+  --space-sm:  16px;
+  --space-md:  32px;
+  --space-lg:  64px;
+  --space-xl:  96px;
+
+  /* ── Layout ── */
+  --max-width: 1100px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+
+  /* ── Transitions ── */
+  --transition: 200ms ease;
+}
