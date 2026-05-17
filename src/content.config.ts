@@ -29,7 +29,9 @@ const credentials = defineCollection({
   schema: z.object({
     title: z.string(),
     issuer: z.string(),
-    date: z.string(),
+    date: z.string().optional(),
+    category: z.string().optional().default('Certification'),
+    description: z.string().optional(),
     url: z.string().optional(),
   }),
 });
