@@ -1,0 +1,50 @@
+---
+import { fetchUnifiedRepos, fetchUnifiedContributions } from '../lib/github';
+import ContributionGrid from './ContributionGrid.astro';
+import RepoCard from './RepoCard.astro';
+
+const [repos, contributions] = await Promise.all([
+  fetchUnifiedRepos(),
+  fetchUnifiedContributions(),
+]);
+---
+
+<section class="code container" id="code">
+  <p class="section-label">code</p>
+
+  <div class="heatmap-block">
+    <p class="heatmap-sub">Contributions across Chimdi-Ag · chicode-dev</p>
+    <ContributionGrid contributions={contributions} />
+  </div>
+
+  {repos.length > 0 && (
+    <div class="repo-grid">
+      {repos.map(repo => <RepoCard repo={repo} />)}
+    </div>
+  )}
+</section>
+
+<style>
+  .code {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .heatmap-block {
+    margin-bottom: var(--space-md);
+  }
+
+  .heatmap-sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-muted);
+    margin-bottom: var(--space-sm);
+    letter-spacing: 0.5px;
+  }
+
+  .repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+  }
+</style>
