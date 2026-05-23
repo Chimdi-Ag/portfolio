@@ -1,0 +1,182 @@
+---
+import type { UnifiedRepo } from '../lib/github';
+import { timeAgo, formatFullDate } from '../lib/github';
+
+interface Props {
+  repo: UnifiedRepo;
+}
+
+const { repo } = Astro.props;
+
+// Standard GitHub language colors for the languages in this allowlist
+const LANG_COLORS: Record<string, string> = {
+  'Python': '#3572A5',
+  'Python / Django': '#3572A5',
+  'C': '#555555',
+  'Java': '#b07219',
+  'Shell': '#89e051',
+  'JavaScript': '#f1e05a',
+  'TypeScript': '#3178c6',
+  'CSS': '#563d7c',
+  'HTML': '#e34c26',
+};
+
+const langColor = repo.language ? (LANG_COLORS[repo.language] ?? '#8b949e') : null;
+const relTime = timeAgo(repo.updatedAt);
+const fullDate = formatFullDate(repo.updatedAt);
+---
+
+<div class="repo-card">
+  <div class="card-top">
+    <h3 class="repo-name">{repo.name}</h3>
+    {repo.profile === 'legacy' && <span class="badge">Legacy</span>}
+  </div>
+
+  <p class="desc">{repo.description}</p>
+
+  <div class="card-footer">
+    <div class="meta">
+      {langColor && (
+        <span class="lang">
+          <span class="lang-dot" style={`background: ${langColor}`} />
+          {repo.language}
+        </span>
+      )}
+      <span class="timestamp" title={fullDate}>{relTime}</span>
+    </div>
+    <div class="links">
+      <a
+        href={repo.htmlUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="link"
+      >GitHub ↗</a>
+      {repo.devpostUrl && (
+        <a
+          href={repo.devpostUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="link link--devpost"
+        >Devpost ↗</a>
+      )}
+    </div>
+  </div>
+</div>
+
+<style>
+  .repo-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    transition: border-color var(--transition), transform var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .repo-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(166, 218, 149, 0.03) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  .repo-card:hover {
+    border-color: rgba(166, 218, 149, 0.2);
+    transform: translateY(-2px);
+  }
+  .repo-card:hover::before { opacity: 1; }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+  }
+
+  .repo-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    font-family: var(--font-mono);
+  }
+
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--color-muted);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    padding: 2px 6px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .desc {
+    font-size: 13px;
+    color: var(--color-muted);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: var(--space-xs);
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .lang {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-muted);
+  }
+
+  .lang-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .timestamp {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-muted);
+    cursor: default;
+  }
+
+  .links {
+    display: flex;
+    gap: var(--space-xs);
+  }
+
+  .link {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+  .link:hover { color: var(--color-green); }
+
+  .link--devpost:hover { color: var(--color-teal); }
+</style>
