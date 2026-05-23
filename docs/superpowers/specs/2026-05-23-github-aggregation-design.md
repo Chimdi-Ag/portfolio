@@ -123,6 +123,7 @@ Each card shows:
 - Language dot (GitHub standard language colors) + language label
 - Timestamp: relative format ("Updated 2 years ago") with full date on hover
 - Source badge: `Legacy` tag (subtle, `surface1` background, `subtext0` text) on chicode-dev repos. No badge on active repos.
+- Links row: GitHub link on every card. `clara-image-genie` also gets a "View on Devpost" link (`https://devpost.com/software/clara-image-genie`). The Devpost URL is hardcoded in the allowlist config alongside the description.
 
 Card styling follows existing `Card.astro` patterns for consistency.
 
@@ -138,6 +139,7 @@ export interface RepoConfig {
   profile: 'active' | 'legacy';
   username: string;
   description: string;
+  devpostUrl?: string;   // optional, only set for clara-image-genie
 }
 
 export interface UnifiedRepo {
