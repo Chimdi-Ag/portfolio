@@ -77,6 +77,7 @@ Descriptions are hardcoded in `github.ts`. They override whatever is on GitHub. 
 | `sorting_algorithms` | Legacy | C | Eight sorting algorithms in C: bubble, insertion, selection, quick, merge, and more. Each annotated with its Big O time complexity. |
 | `SnakeGame` | Legacy | Python | The classic Snake game in Python. Arrow key controls, score tracking, and a game loop that does exactly what it needs to. |
 | `Collaborative_java_projects` | Legacy | Java | Three Java calculator implementations built as a team, including a Shunting Yard parser that handles operator precedence correctly. |
+| `clara-image-genie` | Legacy | Python/Django | Built at a hackathon with a team, Clara is a local image search tool that uses a Vision Transformer, YOLOv3, and OCR to find photos by description, detected objects, or text in the image. Runs entirely offline. Took home an award. |
 
 Cards are sorted by `updated_at` descending (newest first).
 
@@ -167,7 +168,7 @@ export interface DailyContribution {
 ## 9. Success Criteria
 
 - Heatmap shows combined daily contributions from both profiles for the last 52 weeks
-- All 9 repos (minus any that fail to fetch) render with correct descriptions, language, timestamp, and profile badge
+- All 10 repos (minus any that fail to fetch) render with correct descriptions, language, timestamp, and profile badge
 - No API calls happen in the browser
 - No tokens or secrets required
 - Section matches the existing Catppuccin Macchiato visual language
