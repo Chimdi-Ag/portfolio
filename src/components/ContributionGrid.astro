@@ -1,0 +1,149 @@
+---
+import type { DailyContribution } from '../lib/github';
+import { toYMD } from '../lib/github';
+
+interface Props {
+  contributions: DailyContribution[];
+}
+
+const { contributions } = Astro.props;
+
+// Build date-to-count lookup
+const contribMap = new Map<string, number>();
+for (const c of contributions) {
+  contribMap.set(c.date, c.count);
+}
+
+// Roll back to the Monday at or before 363 days ago
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const rawStart = new Date(today);
+rawStart.setDate(rawStart.getDate() - 363);
+const dow = rawStart.getDay();               // 0=Sun, 1=Mon, ..., 6=Sat
+const rollback = dow === 0 ? 6 : dow - 1;   // days to roll back to reach Monday
+rawStart.setDate(rawStart.getDate() - rollback);
+
+interface GridDay {
+  date: string;
+  count: number;
+  tooltip: string;
+  placeholder: boolean;
+}
+
+const weeks: GridDay[][] = [];
+const monthLabels: Array<{ text: string; col: number }> = [];
+let lastMonthKey = '';
+
+const cursor = new Date(rawStart);
+
+while (cursor <= today) {
+  const week: GridDay[] = [];
+  for (let d = 0; d < 7; d++) {
+    const day = new Date(cursor);
+    cursor.setDate(cursor.getDate() + 1);
+
+    const dateStr = toYMD(day); // local-time YYYY-MM-DD, avoids UTC offset bugs
+    const isPlaceholder = day > today;
+    const count = isPlaceholder ? 0 : (contribMap.get(dateStr) ?? 0);
+    const monthKey = `${day.getFullYear()}-${day.getMonth()}`;
+
+    // Track month label on first day of each week
+    if (d === 0 && !isPlaceholder && monthKey !== lastMonthKey) {
+      monthLabels.push({
+        text: day.toLocaleDateString('en-US', { month: 'short' }),
+        col: weeks.length + 1,
+      });
+      lastMonthKey = monthKey;
+    }
+
+    week.push({
+      date: dateStr,
+      count,
+      tooltip: isPlaceholder
+        ? ''
+        : `${count} contribution${count !== 1 ? 's' : ''} on ${day.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`,
+      placeholder: isPlaceholder,
+    });
+  }
+  weeks.push(week);
+}
+
+function cellLevel(count: number): string {
+  if (count === 0) return 'l0';
+  if (count <= 3) return 'l1';
+  if (count <= 6) return 'l2';
+  if (count <= 9) return 'l3';
+  return 'l4';
+}
+---
+
+<div class="grid-wrap">
+  <div
+    class="month-row"
+    style={`grid-template-columns: repeat(${weeks.length}, 12px)`}
+  >
+    {monthLabels.map(m => (
+      <span class="month-label" style={`grid-column: ${m.col}`}>{m.text}</span>
+    ))}
+  </div>
+  <div class="day-grid">
+    {weeks.map(week => (
+      <div class="week-col">
+        {week.map(day => (
+          <div
+            class={`cell ${day.placeholder ? 'placeholder' : cellLevel(day.count)}`}
+            title={day.tooltip}
+          />
+        ))}
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .grid-wrap {
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .month-row {
+    display: grid;
+    column-gap: 3px;
+    margin-bottom: 6px;
+    min-height: 16px;
+  }
+
+  .month-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+
+  .day-grid {
+    display: flex;
+    gap: 3px;
+  }
+
+  .week-col {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    cursor: default;
+    flex-shrink: 0;
+  }
+
+  .placeholder { background: transparent; }
+  .l0 { background: rgba(255, 255, 255, 0.06); }
+  .l1 { background: rgba(166, 218, 149, 0.25); }
+  .l2 { background: rgba(166, 218, 149, 0.50); }
+  .l3 { background: rgba(166, 218, 149, 0.75); }
+  .l4 { background: #a6da95; }
+</style>
